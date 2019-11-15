@@ -13,7 +13,6 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     var myPlaceList:places = places()
 
     @IBOutlet weak var placeTable: UITableView!
-    @IBOutlet weak var placeNameLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,7 +22,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-        //returns number of cities :D
+        //returns number of places
         return myPlaceList.getCount()
     }
     
@@ -34,8 +33,8 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         
         let placeItem = myPlaceList.getPlaceObject(item: indexPath.row)
         
+        //adds place name in TableViewCell
         cell.placeTitle.text = placeItem.placeName
-//        cell.placeImage.image = UIImage(named: placeItem.placeImageName)
         
         return cell
     }
@@ -45,8 +44,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell.EditingStyle {
-        return UITableViewCell.EditingStyle.delete
-        
+        return UITableViewCell.EditingStyle.delete  
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
@@ -60,19 +58,21 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     @IBAction func add(_ sender: Any) {
+        //creates an alert view asking the user to add a new place
         let alert = UIAlertController(title: "Add Place", message: nil, preferredStyle: .alert)
-               alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
+            alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 
-               alert.addTextField(configurationHandler: {
-                   textField in textField.placeholder = "Enter the name of the new place"
-               })
+            alert.addTextField(configurationHandler: {
+                textField in textField.placeholder = "Enter the name of the new place"
+            })
 
-               alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {
-                   action in
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: {
+                action in
 
-                   if let name = alert.textFields?.first?.text {
+                 if let name = alert.textFields?.first?.text {
                        print("place name: \(name)")
-
+                     
+                       //adds new place to array
                        self.myPlaceList.addPlaceObject(name: name, image: "place.jpg")
 
                        let indexPath = IndexPath (row: self.myPlaceList.getCount() - 1, section: 0)
@@ -83,9 +83,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                }))
 
                self.present(alert, animated: true)
-        
     }
     
+    //sends place name to DetailViewController
     override func prepare(for segue: UIStoryboardSegue, sender: Any?){
         let selectedIndex: IndexPath = self.placeTable.indexPath(for: sender as! UITableViewCell)!
         
