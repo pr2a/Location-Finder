@@ -11,10 +11,10 @@ import UIKit
 import MapKit
 
 class DetailViewController: UIViewController {
+    //chosen TableViewCell
     var selectedPlace:place!
     
     @IBOutlet weak var map: MKMapView!
-    
     @IBOutlet weak var long: UITextField!
     @IBOutlet weak var lat: UITextField!
     @IBOutlet weak var searchItem: UITextField!
@@ -23,6 +23,7 @@ class DetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        //enter address and get coordinates
         let geoCoder = CLGeocoder()
         
         let addressString = selectedPlace.placeName!
@@ -39,11 +40,11 @@ class DetailViewController: UIViewController {
                 let span = MKCoordinateSpan.init(latitudeDelta: 0.05, longitudeDelta: 0.05)
                 let region = MKCoordinateRegion(center: placemark.location!.coordinate, span: span)
                 self.map.setRegion(region, animated: true)
+                
                 let ani = MKPointAnnotation()
                 ani.coordinate = placemark.location!.coordinate
                 ani.title = placemark.locality
                 ani.subtitle = placemark.subLocality
-                
                 self.map.addAnnotation(ani)
                 
                 self.long.text = String(placemark.location!.coordinate.longitude)
@@ -67,8 +68,8 @@ class DetailViewController: UIViewController {
             var matchingItems:[MKMapItem] = []
             matchingItems = response.mapItems
             
+            //resets pins on the map
             let allAnnotations = self.map.annotations
-            
             self.map.removeAnnotations(allAnnotations)
             
             for i in 1...matchingItems.count - 1 {
@@ -85,25 +86,17 @@ class DetailViewController: UIViewController {
                 ani.coordinate = place.location!.coordinate
                 ani.title = place.name
                 
-                
-                
                 self.map.addAnnotation(ani)
-            }
-            
-        }
-        
-        
+            }   
+        }  
     }
     
     @IBAction func showMap(_ sender: Any) {
-        
         switch(mapType.selectedSegmentIndex) {
                case 0:
                    map.mapType = MKMapType.standard
-               
                case 1:
-                  map.mapType = MKMapType.satellite
-                   
+                  map.mapType = MKMapType.satellite  
                default:
                    map.mapType = MKMapType.standard
                }
@@ -112,9 +105,5 @@ class DetailViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-    
-    
-    
-    
-    
+ 
 }
